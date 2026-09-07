@@ -24,8 +24,9 @@
   .g2{display:grid;grid-template-columns:1fr;gap:18px}
   .g4{display:grid;grid-template-columns:1fr;gap:18px}
   .rail{display:grid;grid-template-columns:1fr;gap:10px}
+  .g3{display:grid;grid-template-columns:1fr;gap:18px}.gband{display:grid;grid-template-columns:1fr;gap:16px}
   .path{display:grid;grid-template-columns:1fr 1fr;gap:22px 14px;align-items:start;position:relative}.path .pline{display:none}
-  @media(min-width:760px){.g2{grid-template-columns:1fr 1fr;gap:26px}.g4{grid-template-columns:1fr 1fr;gap:26px}.rail{grid-template-columns:repeat(5,1fr);gap:18px}.wrap{padding:0 32px}.path{grid-template-columns:repeat(4,1fr);gap:8px}.path .pline{display:block}}
+  @media(min-width:760px){.g2{grid-template-columns:1fr 1fr;gap:26px}.g4{grid-template-columns:1fr 1fr;gap:26px}.g3{grid-template-columns:repeat(3,1fr);gap:22px}.gband{grid-template-columns:240px 1fr;gap:40px;align-items:start}.rail{grid-template-columns:repeat(5,1fr);gap:18px}.wrap{padding:0 32px}.path{grid-template-columns:repeat(4,1fr);gap:8px}.path .pline{display:block}}
   .weave{background-image:repeating-linear-gradient(45deg,rgba(210,182,127,.045) 0 1px,transparent 1px 9px),repeating-linear-gradient(-45deg,rgba(210,182,127,.045) 0 1px,transparent 1px 9px)}
   .grain{position:absolute;inset:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.9'/></svg>")}
   [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.2,.6,.2,1),transform 1s cubic-bezier(.2,.6,.2,1)}
@@ -50,7 +51,15 @@
   @keyframes cue{0%{transform:scaleY(0);transform-origin:top;opacity:0}30%{opacity:1}100%{transform:scaleY(1);transform-origin:top;opacity:0}}
   .dot{width:10px;height:10px;border-radius:50%;background:#2B2620;border:1px solid #4A4033;transition:background .6s,border-color .6s,box-shadow .6s}
   .dot.on{background:#D2B67F;border-color:#D2B67F;box-shadow:0 0 12px rgba(210,182,127,.55)}
-  @media(prefers-reduced-motion:reduce){[data-reveal],[data-line],[data-vline]{opacity:1;transform:none;transition:none}.sweep,.pahu,.shim,.tick,.ember,.glow,.cue{animation:none}.sweep{background-position:0 0}.ember{display:none}}
+  .jdot.jfire.on{background:#B03A2E;border-color:#B03A2E;box-shadow:0 0 12px rgba(176,58,46,.6)}
+  .band{position:relative;overflow:hidden;background:linear-gradient(180deg,#0C0A07 0%,#150F0B 45%,#0C0A07 100%)}
+  .glow.big{width:140%;height:90%;bottom:-30%;background:radial-gradient(ellipse at 50% 100%,rgba(176,58,46,.42),rgba(176,58,46,.12) 42%,transparent 72%)}
+  .candle{position:absolute;left:50%;top:46%;width:min(1100px,160vw);aspect-ratio:1;transform:translate(-50%,-50%) scale(.94);background:radial-gradient(circle,rgba(210,182,127,.17),rgba(210,182,127,.06) 38%,transparent 66%);pointer-events:none;animation:candle 7.5s ease-in-out infinite alternate}
+  @keyframes candle{0%{transform:translate(-50%,-50%) scale(.94);opacity:.72}100%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
+  .spark{position:absolute;bottom:-6px;width:2px;height:2px;border-radius:50%;background:#E4D2A8;box-shadow:0 0 5px 1px rgba(228,210,168,.45);opacity:0;animation:spark linear infinite}
+  @keyframes spark{0%{transform:translate(0,0);opacity:0}10%{opacity:.65}70%{opacity:.3}100%{transform:translate(var(--dx),-620px);opacity:0}}
+  #jline{transform:scaleY(0);transform-origin:top;transition:transform .12s linear}
+  @media(prefers-reduced-motion:reduce){[data-reveal],[data-line],[data-vline]{opacity:1;transform:none;transition:none}.sweep,.pahu,.shim,.tick,.ember,.glow,.cue,.candle,.spark{animation:none}.sweep{background-position:0 0}.ember,.spark{display:none}#jline{transform:none!important}.jdot{background:#D2B67F;border-color:#D2B67F}}
 </style>
 <script>
 (function(){
@@ -58,10 +67,15 @@
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;t.classList.add('on');
       t.querySelectorAll('[data-line],[data-vline]').forEach(function(l){l.classList.add('on')});
       t.querySelectorAll('[data-count]').forEach(function(n){count(n)});
-      t.querySelectorAll('.dot').forEach(function(d,i){setTimeout(function(){d.classList.add('on')},350+i*420)});
+      t.querySelectorAll('.dot:not(.jdot)').forEach(function(d,i){setTimeout(function(){d.classList.add('on')},350+i*420)});
       io.unobserve(t)});},{threshold:.14});
     document.querySelectorAll('[data-reveal]').forEach(function(el){io.observe(el)});
-    document.querySelectorAll('.embers').forEach(function(f){for(var i=0;i<38;i++){var e=document.createElement('span');e.className='ember';e.style.left=(Math.random()*100)+'%';e.style.setProperty('--dx',(Math.random()*90-45)+'px');e.style.animationDuration=(5+Math.random()*6)+'s';e.style.animationDelay=(-Math.random()*9)+'s';e.style.width=e.style.height=(2+Math.random()*3)+'px';f.appendChild(e)}});
+    document.querySelectorAll('.embers').forEach(function(f){var N=f.classList.contains('wide')?72:38;for(var i=0;i<N;i++){var e=document.createElement('span');e.className='ember';e.style.left=(Math.random()*100)+'%';e.style.setProperty('--dx',(Math.random()*90-45)+'px');e.style.animationDuration=(5+Math.random()*6)+'s';e.style.animationDelay=(-Math.random()*9)+'s';e.style.width=e.style.height=(2+Math.random()*3)+'px';f.appendChild(e)}});
+    document.querySelectorAll('.sparks').forEach(function(f){for(var i=0;i<16;i++){var e=document.createElement('span');e.className='spark';e.style.left=(Math.random()*100)+'%';e.style.setProperty('--dx',(Math.random()*120-60)+'px');e.style.animationDuration=(9+Math.random()*8)+'s';e.style.animationDelay=(-Math.random()*16)+'s';f.appendChild(e)}});
+    var rail=document.getElementById('journey'),line=document.getElementById('jline');
+    if(rail&&line){var jd=rail.querySelectorAll('.jdot'),rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+      function upd(){var r=rail.getBoundingClientRect(),vh=window.innerHeight;var p=(vh*0.78-r.top)/r.height;p=Math.max(0,Math.min(1,p));if(rm)p=1;line.style.transform='scaleY('+p+')';jd.forEach(function(d,i){d.classList.toggle('on',p>=(i+0.5)/jd.length)})}
+      var tk=false;window.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(function(){upd();tk=false})}},{passive:true});window.addEventListener('resize',upd);upd()}
     var nav=document.getElementById('nav'),hero=document.getElementById('hero');
     if(nav&&hero){new IntersectionObserver(function(es){nav.style.opacity=es[0].isIntersecting?'0':'1';nav.style.pointerEvents=es[0].isIntersecting?'none':'auto'},{threshold:.15}).observe(hero)}
   }
@@ -85,13 +99,15 @@
 <!-- HERO -->
 <div id="hero" class="weave" style="position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:96px 22px 80px;background-color:#0C0A07;">
   <div class="grain"></div>
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 42%,rgba(210,182,127,.13),transparent 62%),radial-gradient(ellipse 100% 40% at 50% 100%,rgba(12,10,7,.9),transparent);pointer-events:none;"></div>
+  <div class="candle"></div>
+  <div class="sparks" style="position:absolute;inset:0;pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 40% at 50% 100%,rgba(12,10,7,.9),transparent);pointer-events:none;"></div>
   <div style="position:relative;">
     <div class="sweep" style="font-family:'Italiana',serif;font-size:clamp(66px,13vw,150px);letter-spacing:.26em;text-indent:.26em;line-height:1;">ULANA</div>
     <div style="margin-top:clamp(10.6px,2.08vw,24px);font-size:clamp(11.5px,2.275vw,26px);font-weight:500;letter-spacing:1.40em;text-indent:1.40em;text-transform:uppercase;background:linear-gradient(180deg,#F0E0B6,#C9AC74);-webkit-background-clip:text;background-clip:text;color:transparent;">Productions</div>
     <div data-reveal style="margin-top:clamp(56px,9vh,96px);transition-delay:.9s;">
       <div style="font-family:'Marcellus',serif;font-size:12.5px;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;color:#8F7344;">For South Maui Gardens</div>
-      <div style="margin-top:18px;font-family:'Italiana',serif;font-size:clamp(46px,8.5vw,96px);line-height:1.02;color:#F2E8D5;">For the Gardens</div>
+      <div style="margin-top:18px;font-family:'Italiana',serif;font-size:clamp(46px,9vw,112px);line-height:1.02;color:#F2E8D5;">For the Gardens</div>
       <div style="margin:22px auto 0;width:64px;height:1px;background:linear-gradient(90deg,transparent,#8F7344,transparent);"></div>
       <div style="margin-top:20px;font-size:clamp(16px,2.2vw,20px);font-style:italic;font-weight:350;color:#D9C9B0;max-width:24em;margin-left:auto;margin-right:auto;">Who we are, what we've built, and what's ours to give.</div>
       <div style="margin-top:22px;font-family:'Marcellus',serif;font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:#6E665A;line-height:2;">Prepared for Bo Banks and Mike<br>September 2026</div>
@@ -105,13 +121,13 @@
   <div class="wrap" style="padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">You know us</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Already inside your gates.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Already inside your gates.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 34px;"></div>
     </div>
     <div class="g2">
       <div data-reveal style="background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:26px 24px 28px;transition-delay:.1s;">
         <div style="font-family:'Marcellus',serif;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#D2B67F;">Jess Flores</div>
-        <p style="margin:14px 0 0;font-size:17px;line-height:1.6;color:#F2E8D5;">Jess was a significant part of the hula show you had in the Gardens — producing, training, managing on-site, there night after night, helping oversee its day-to-day running as part of the company that presented it.</p>
+        <p style="margin:14px 0 0;font-size:17px;line-height:1.6;color:#F2E8D5;">Jess was a significant part of the hula show you had in the Gardens — producing, training, managing on-site, there night after night. As part of the company that presented it, she helped oversee its day-to-day running.</p>
         <p style="margin:12px 0 0;font-size:15.5px;line-height:1.6;color:#A99F8E;">Twenty-five years in hula, cultural performance, and private events across Maui.</p>
       </div>
       <div data-reveal style="background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:26px 24px 28px;transition-delay:.25s;">
@@ -135,7 +151,7 @@
   <div class="wrap" style="position:relative;padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">The person behind it</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">From Molokaʻi.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">From Molokaʻi.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 34px;"></div>
     </div>
     <div class="rail" data-reveal style="margin-bottom:40px;">
@@ -166,11 +182,11 @@
   <div class="wrap" style="padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">The show</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Four movements.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Four movements.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 26px;"></div>
       <p style="margin:0 0 34px;font-size:19px;line-height:1.5;color:#F2E8D5;font-weight:500;max-width:30em;">The best show on Maui, bar none — and here is what that means.</p>
     </div>
-    <div class="g4">
+    <div class="g3">
       <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:28px 24px 30px;min-height:250px;">
         <div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;"></div><div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;animation-delay:1.2s;"></div><div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;animation-delay:2.4s;"></div>
         <div style="position:relative;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">01</div>
@@ -189,15 +205,19 @@
         <div style="margin-top:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#D2B67F;">Tahitian</div>
         <p style="margin:12px 0 0;font-size:16px;line-height:1.62;color:#D9C9B0;">Dancers nurtured inside the practice, from the school of Jess's close friend Tereva, raised in the dance in Tahiti. Not a segment of a Polynesian show — a culture carried by people who grew up in it.</p></div>
       </div>
-      <div data-reveal style="position:relative;overflow:hidden;background:#140F0B;border:1px solid #3A2A22;border-radius:16px;padding:28px 24px 30px;min-height:250px;transition-delay:.36s;">
-        <div class="glow"></div><div class="embers" style="position:absolute;inset:0;pointer-events:none;"></div>
-        <div style="position:relative;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#B03A2E;">04</div>
-        <div style="margin-top:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#E8A24C;">Fire</div>
-        <p style="margin:12px 0 0;font-size:16px;line-height:1.62;color:#E9DDC8;">Tahitian fire and fire knife, woven into the Tahitian movement so the energy builds instead of waiting for the end. The cast loves it, and the room can tell.</p></div>
-      </div>
     </div>
-    <p data-reveal style="margin:26px 0 0;font-size:13.5px;font-style:italic;color:#6E665A;">Fire knife — siva afi — is Samoan in origin. We credit each culture in every program.</p>
   </div>
+  <!-- 04 · FIRE — full bleed -->
+  <div class="band" data-reveal style="margin-top:26px;">
+    <div class="glow big"></div><div class="embers wide" style="position:absolute;inset:0;pointer-events:none;"></div>
+    <div class="wrap gband" style="position:relative;padding-top:clamp(56px,8vh,96px);padding-bottom:clamp(56px,8vh,96px);">
+      <div><div style="font-family:'Italiana',serif;font-size:clamp(64px,9vw,110px);line-height:.9;color:#B03A2E;">04</div>
+        <div style="margin-top:14px;font-family:'Marcellus',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#E8A24C;">Fire</div></div>
+      <div><div style="font-family:'Italiana',serif;font-size:clamp(28px,4vw,44px);line-height:1.15;color:#F2E8D5;max-width:18em;">Tahitian fire and fire knife, woven into the Tahitian movement so the energy builds instead of waiting for the end.</div>
+        <p style="margin:18px 0 0;font-size:18px;line-height:1.6;color:#E9DDC8;max-width:34em;">The cast loves it, and the room can tell.</p></div>
+    </div>
+  </div>
+  <div class="wrap" style="padding-top:22px;padding-bottom:clamp(60px,9vh,100px);"><p data-reveal style="margin:0;font-size:13.5px;font-style:italic;color:#6E665A;">Fire knife — siva afi — is Samoan in origin. We credit each culture in every program.</p></div>
 </div>
 
 <!-- 4 · THE PEOPLE BEHIND IT -->
@@ -206,7 +226,7 @@
   <div class="wrap" style="position:relative;padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">What makes it different</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">The people behind it.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">The people behind it.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 30px;"></div>
       <p style="margin:0;font-size:18px;line-height:1.62;color:#F2E8D5;max-width:40em;">Our dancers come from hālau backgrounds. They aren't entertainers learning choreography for a stage — they've been surrounded by their cultures from a young age: the histories, the stories, the family teachings. That's what a guest feels, even when they can't name it.</p>
       <p style="margin:14px 0 0;font-size:17px;line-height:1.62;color:#D9C9B0;max-width:40em;">And it runs the other way, too. Tereva trains the young dancers of Maui — into professionals. When they're ready, they carry straight over into Ulana. A girl who starts in her classes at eight has a career in her own cultural practice waiting for her.</p>
@@ -234,20 +254,24 @@
   <div class="wrap" style="padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">What the Gardens can be</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">A front door to Maui.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">A front door to Maui.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 38px;"></div>
     </div>
-    <div style="position:relative;padding-left:34px;">
-      <div data-reveal style="position:absolute;left:5px;top:6px;bottom:6px;width:1px;"><div data-vline style="width:1px;height:100%;background:linear-gradient(180deg,#8F7344,#D2B67F 60%,#B03A2E);"></div></div>
-      <div data-reveal style="position:relative;margin-bottom:26px;"><div class="dot on" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The plane</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">A family steps off. First time on Maui, a week ahead of them, everything new.</p></div>
-      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.1s;"><div class="dot on" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The screens</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They saw the Gardens on the screens at the airport. They book.</p></div>
-      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.15s;"><div class="dot on" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">Six acres, a dozen kitchens</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They eat from three of them at one table.</p></div>
-      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.2s;"><div class="dot on" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The show</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">Kahiko, ʻauana, Tahitian — and then fire under the trees.</p></div>
-      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.25s;"><div class="dot on" style="position:absolute;left:-34px;top:8px;background:#B03A2E;border-color:#B03A2E;box-shadow:0 0 12px rgba(176,58,46,.6);"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">One night</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They've tasted the food, met the people, and felt something of this place.</p></div>
-      <div data-reveal style="position:relative;transition-delay:.3s;"><div class="dot on" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">Six more days</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They come back for the trucks they missed. They tell the family at the next table. Every return trip to Maui starts with the memory of that night.</p></div>
+    <div id="journey" style="position:relative;padding-left:34px;">
+      <div style="position:absolute;left:5px;top:6px;bottom:6px;width:1px;"><div id="jline" style="width:1px;height:100%;background:linear-gradient(180deg,#8F7344,#D2B67F 60%,#B03A2E);"></div></div>
+      <div data-reveal style="position:relative;margin-bottom:26px;"><div class="dot jdot" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The plane</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">A family steps off. First time on Maui, a week ahead of them, everything new.</p></div>
+      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.1s;"><div class="dot jdot" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The screens</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They saw the Gardens on the screens at the airport. They book.</p></div>
+      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.15s;"><div class="dot jdot" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">Six acres, a dozen kitchens</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They eat from three of them at one table.</p></div>
+      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.2s;"><div class="dot jdot" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">The show</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">Kahiko, ʻauana, Tahitian — and then fire under the trees.</p></div>
+      <div data-reveal style="position:relative;margin-bottom:26px;transition-delay:.25s;"><div class="dot jdot jfire" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">One night</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They've tasted the food, met the people, and felt something of this place.</p></div>
+      <div data-reveal style="position:relative;transition-delay:.3s;"><div class="dot jdot" style="position:absolute;left:-34px;top:8px;"></div><div style="font-family:'Italiana',serif;font-size:26px;color:#F2E8D5;">Six more days</div><p style="margin:6px 0 0;font-size:16.5px;line-height:1.6;color:#D9C9B0;max-width:34em;">They come back for the trucks they missed. They tell the family at the next table. Every return trip to Maui starts with the memory of that night.</p></div>
     </div>
-    <div data-reveal style="margin-top:44px;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:30px 28px;">
-      <div style="font-family:'Italiana',serif;font-size:clamp(26px,4.2vw,40px);line-height:1.2;background:linear-gradient(180deg,#F5EBD3,#E4D2A8 60%,#CBB081);-webkit-background-clip:text;background-clip:text;color:transparent;max-width:20em;">That's what the Gardens did. That's what it can do again — and what we want to help you build.</div>
+  </div>
+  <!-- the finale — full bleed -->
+  <div class="band" data-reveal style="margin-top:44px;">
+    <div class="glow big"></div><div class="embers wide" style="position:absolute;inset:0;pointer-events:none;"></div>
+    <div class="wrap" style="position:relative;padding-top:clamp(72px,11vh,130px);padding-bottom:clamp(72px,11vh,130px);text-align:center;">
+      <div style="font-family:'Italiana',serif;font-size:clamp(30px,5.2vw,64px);line-height:1.14;background:linear-gradient(180deg,#F5EBD3,#E4D2A8 60%,#CBB081);-webkit-background-clip:text;background-clip:text;color:transparent;max-width:19em;margin:0 auto;">That's what the Gardens did. That's what it can do again — and what we want to help you build.</div>
     </div>
   </div>
 </div>
@@ -258,7 +282,7 @@
   <div class="wrap" style="position:relative;padding-top:clamp(72px,11vh,120px);padding-bottom:clamp(72px,11vh,120px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">How we'll do it</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6vw,64px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Done right.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(38px,6.4vw,78px);line-height:1.06;color:#F2E8D5;margin:14px 0 0;">Done right.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 26px;"></div>
       <p style="margin:0 0 10px;font-size:20px;line-height:1.45;font-weight:500;color:#F2E8D5;max-width:26em;">The next time there's a show in the Gardens, no one should be able to say it wasn't done right.</p>
       <p style="margin:0 0 30px;font-size:16px;color:#A99F8E;">We're building Ulana to hotel-vendor standards:</p>
@@ -280,7 +304,7 @@
   <div class="wrap" style="position:relative;padding-top:clamp(80px,12vh,130px);padding-bottom:clamp(80px,12vh,130px);">
     <div data-reveal>
       <div style="font-family:'Marcellus',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#8F7344;">The ask</div>
-      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(44px,7.5vw,84px);line-height:1.02;color:#F2E8D5;margin:14px 0 0;">Call Jess first.</h2>
+      <h2 style="font-family:'Italiana',serif;font-weight:400;font-size:clamp(44px,8vw,100px);line-height:1.02;color:#F2E8D5;margin:14px 0 0;">Call Jess first.</h2>
       <div data-line style="width:88px;height:1px;background:#8F7344;margin:22px 0 30px;"></div>
       <p style="margin:0;font-size:19px;line-height:1.6;color:#F2E8D5;max-width:36em;">When the shows come back to the Gardens, we want to be the company that produces them. Not a new show from strangers — the one you already know, from the person who can build it again, now on her own terms and better than it was. We're not asking for a decision today; the timing isn't yours to control yet. We're asking to be your first call.</p>
     </div>

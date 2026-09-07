@@ -25,8 +25,10 @@
   .g4{display:grid;grid-template-columns:1fr;gap:18px}
   .rail{display:grid;grid-template-columns:1fr;gap:10px}
   .g3{display:grid;grid-template-columns:1fr;gap:18px}.gband{display:grid;grid-template-columns:1fr;gap:16px}
+  .only-desk{display:none}.only-mob{display:block}
+  .cap{position:relative;height:210px;background-position:center 22%;background-size:cover;background-repeat:no-repeat}.cap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,11,.08) 0%,rgba(18,16,11,.35) 55%,#12100B 100%)}
   .path{display:grid;grid-template-columns:1fr 1fr;gap:22px 14px;align-items:start;position:relative}.path .pline{display:none}
-  @media(min-width:760px){.g2{grid-template-columns:1fr 1fr;gap:26px}.g4{grid-template-columns:1fr 1fr;gap:26px}.g3{grid-template-columns:repeat(3,1fr);gap:22px}.gband{grid-template-columns:240px 1fr;gap:40px;align-items:start}.rail{grid-template-columns:repeat(5,1fr);gap:18px}.wrap{padding:0 32px}.path{grid-template-columns:repeat(4,1fr);gap:8px}.path .pline{display:block}}
+  @media(min-width:760px){.g2{grid-template-columns:1fr 1fr;gap:26px}.g4{grid-template-columns:1fr 1fr;gap:26px}.g3{grid-template-columns:repeat(3,1fr);gap:22px}.gband{grid-template-columns:240px 1fr;gap:40px;align-items:start}.only-desk{display:block}.only-mob{display:none}.gband.has-photo{grid-template-columns:200px 1fr 34%;gap:36px}.rail{grid-template-columns:repeat(5,1fr);gap:18px}.wrap{padding:0 32px}.path{grid-template-columns:repeat(4,1fr);gap:8px}.path .pline{display:block}}
   .weave{background-image:repeating-linear-gradient(45deg,rgba(210,182,127,.045) 0 1px,transparent 1px 9px),repeating-linear-gradient(-45deg,rgba(210,182,127,.045) 0 1px,transparent 1px 9px)}
   .grain{position:absolute;inset:0;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.9'/></svg>")}
   [data-reveal]{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.2,.6,.2,1),transform 1s cubic-bezier(.2,.6,.2,1)}
@@ -98,6 +100,8 @@
 
 <!-- HERO -->
 <div id="hero" class="weave" style="position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:96px 22px 80px;background-color:#0C0A07;">
+  <div style="position:absolute;inset:0;background:url(./img/hero.jpg) center 42%/cover no-repeat;opacity:.6;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 64% 60% at 50% 46%,rgba(12,10,7,.9),rgba(12,10,7,.66) 55%,rgba(12,10,7,.3) 100%),linear-gradient(180deg,rgba(12,10,7,.6) 0%,transparent 28%,transparent 62%,rgba(12,10,7,.96) 100%);pointer-events:none;"></div>
   <div class="grain"></div>
   <div class="candle"></div>
   <div class="sparks" style="position:absolute;inset:0;pointer-events:none;"></div>
@@ -188,21 +192,24 @@
       <p style="margin:0 0 34px;font-size:19px;line-height:1.5;color:#F2E8D5;font-weight:500;max-width:30em;">The best show on Maui, bar none — and here is what that means.</p>
     </div>
     <div class="g3">
-      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:28px 24px 30px;min-height:250px;">
+      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:0 0 30px;min-height:250px;">
         <div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;"></div><div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;animation-delay:1.2s;"></div><div class="pahu" style="right:-40px;top:-40px;width:200px;height:200px;animation-delay:2.4s;"></div>
-        <div style="position:relative;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">01</div>
+        <div class="cap" style="background-image:url(./img/m01.jpg);"></div>
+        <div style="position:relative;padding:18px 24px 0;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">01</div>
         <div style="margin-top:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#D2B67F;">Hula Kahiko</div>
         <p style="margin:12px 0 0;font-size:16px;line-height:1.62;color:#D9C9B0;">The pahu. Chant, percussion, the strength of kāne and wahine together. Jess's earliest lasting impression was John Kaimikaua's kāne at Ka Hula Piko on Molokaʻi — the drum reaching past what you could see. That is the feeling this movement is built to give a room.</p></div>
       </div>
-      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:28px 24px 30px;min-height:250px;transition-delay:.12s;">
+      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:0 0 30px;min-height:250px;transition-delay:.12s;">
         <div class="shim"></div>
-        <div style="position:relative;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">02</div>
+        <div class="cap" style="background-image:url(./img/m02.jpg);"></div>
+        <div style="position:relative;padding:18px 24px 0;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">02</div>
         <div style="margin-top:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#D2B67F;">Hula ʻAuana</div>
         <p style="margin:12px 0 0;font-size:16px;line-height:1.62;color:#D9C9B0;">The islands through mele — melody, story, movement, implements. Live musicians who bring their own connection to each song, so the music is part of the storytelling, not behind it.</p></div>
       </div>
-      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:28px 24px 30px;min-height:250px;transition-delay:.24s;">
+      <div data-reveal style="position:relative;overflow:hidden;background:#12100B;border:1px solid #2B2620;border-radius:16px;padding:0 0 30px;min-height:250px;transition-delay:.24s;">
         <div style="position:absolute;right:22px;top:26px;display:flex;align-items:flex-end;gap:5px;height:34px;"><div class="tick" style="height:34px;animation-delay:0s"></div><div class="tick" style="height:34px;animation-delay:.12s"></div><div class="tick" style="height:34px;animation-delay:.24s"></div><div class="tick" style="height:34px;animation-delay:.36s"></div><div class="tick" style="height:34px;animation-delay:.48s"></div><div class="tick" style="height:34px;animation-delay:.6s"></div></div>
-        <div style="position:relative;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">03</div>
+        <div class="cap" style="background-image:url(./img/m03.jpg);"></div>
+        <div style="position:relative;padding:18px 24px 0;"><div style="font-family:'Italiana',serif;font-size:34px;line-height:1;color:#8F7344;">03</div>
         <div style="margin-top:10px;font-family:'Marcellus',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#D2B67F;">Tahitian</div>
         <p style="margin:12px 0 0;font-size:16px;line-height:1.62;color:#D9C9B0;">Dancers nurtured inside the practice, from the school of Jess's close friend Tereva — rooted in Tahiti, teaching her culture here on Maui, inspiring many through her passion for the performing arts. Not a segment of a Polynesian show — a culture carried by people who grew up in it.</p></div>
       </div>
@@ -211,11 +218,13 @@
   <!-- 04 · FIRE — full bleed -->
   <div class="band" data-reveal style="margin-top:26px;">
     <div class="glow big"></div><div class="embers wide" style="position:absolute;inset:0;pointer-events:none;"></div>
-    <div class="wrap gband" style="position:relative;padding-top:clamp(56px,8vh,96px);padding-bottom:clamp(56px,8vh,96px);">
+    <div class="wrap gband has-photo" style="position:relative;padding-top:clamp(56px,8vh,96px);padding-bottom:clamp(56px,8vh,96px);">
+      <div class="only-mob" style="height:360px;border-radius:16px;overflow:hidden;background:url(./img/fire.jpg) center 30%/cover no-repeat;box-shadow:0 30px 80px rgba(176,58,46,.25);"></div>
       <div><div style="font-family:'Italiana',serif;font-size:clamp(64px,9vw,110px);line-height:.9;color:#B03A2E;">04</div>
         <div style="margin-top:14px;font-family:'Marcellus',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#E8A24C;">Fire</div></div>
       <div><div style="font-family:'Italiana',serif;font-size:clamp(28px,4vw,44px);line-height:1.15;color:#F2E8D5;max-width:18em;">Tahitian fire and fire knife, woven into the Tahitian movement so the energy builds instead of waiting for the end.</div>
         <p style="margin:18px 0 0;font-size:18px;line-height:1.6;color:#E9DDC8;max-width:34em;">The cast loves it, and the room can tell.</p></div>
+      <div class="only-desk" style="position:relative;align-self:stretch;min-height:420px;border-radius:16px;overflow:hidden;background:url(./img/fire.jpg) center 28%/cover no-repeat;box-shadow:0 30px 80px rgba(176,58,46,.28);"><div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(21,15,11,.55),transparent 40%);"></div></div>
       <p style="grid-column:1/-1;margin:22px 0 0;font-size:13px;font-style:italic;color:rgba(233,221,200,.5);">Fire knife — siva afi — is Samoan in origin. We credit each culture in every program.</p>
     </div>
   </div>
@@ -270,6 +279,8 @@
   </div>
   <!-- the finale — full bleed -->
   <div class="band" data-reveal style="margin-top:44px;">
+    <div style="position:absolute;inset:0;background:url(./img/finale.jpg) center 38%/cover no-repeat;opacity:.5;"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0C0A07 0%,rgba(12,10,7,.3) 38%,rgba(12,10,7,.3) 66%,#0C0A07 100%);"></div>
     <div class="glow big"></div><div class="embers wide" style="position:absolute;inset:0;pointer-events:none;"></div>
     <div class="wrap" style="position:relative;padding-top:clamp(72px,11vh,130px);padding-bottom:clamp(72px,11vh,130px);text-align:center;">
       <div style="font-family:'Italiana',serif;font-size:clamp(30px,5.2vw,64px);line-height:1.14;background:linear-gradient(180deg,#F5EBD3,#E4D2A8 60%,#CBB081);-webkit-background-clip:text;background-clip:text;color:transparent;max-width:19em;margin:0 auto;">That's what the Gardens did. That's what it can do again — and what we want to help you build.</div>
